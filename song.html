@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜歌曲名称游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        body {
+            background-color: #f5f8ff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .header h1 {
+            color: #2c5282;
+            margin-bottom: 15px;
+        }
+
+        .audio-player {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .audio-title {
+            font-size: 16px;
+            color: #718096;
+            margin-bottom: 15px;
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .audio-btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            background-color: #3182ce;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:disabled {
+            background-color: #a0aec0;
+            cursor: not-allowed;
+        }
+
+        /* 猜歌选项样式 */
+        .question-info {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .progress {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 15px;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 15px;
+            grid-template-columns: repeat(2, 1fr);
+            margin-bottom: 30px;
+        }
+
+        .option-btn {
+            padding: 18px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background-color: #fff;
+            color: #2d3748;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: #3182ce;
+            background-color: #ebf8ff;
+        }
+
+        .option-btn.correct {
+            background-color: #c6f6d5;
+            border-color: #38a169;
+            color: #22543d;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background-color: #fed7d7;
+            border-color: #e53e3e;
+            color: #742a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>猜歌曲名称游戏</h1>
+            <p>播放音频片段，选择正确的歌曲名称</p>
+        </div>
+
+        <!-- 音频播放模块 -->
+        <div class="audio-player">
+            <div class="audio-title">当前歌曲片段：</div>
+            <div class="audio-controls">
+                <button class="audio-btn" id="play-audio">播放音频</button>
+                <button class="audio-btn" id="pause-audio">暂停音频</button>
+                <button class="audio-btn" id="reset-audio">重置音频</button>
+            </div>
+            <!-- 隐藏的Audio标签（核心播放组件） -->
+            <audio id="song-audio" preload="metadata">
+                <!-- 这里替换为你的本地音频路径或合法音频链接 -->
+                <source src="./songs/clip1.mp3" type="audio/mpeg">
+                你的浏览器不支持音频播放，请升级浏览器。
+            </audio>
+        </div>
+
+        <!-- 猜歌答题模块 -->
+        <div class="question-info">
+            <div class="progress">当前进度：1/10</div>
+        </div>
+        <div class="options-container" id="song-options"></div>
+    </div>
+
+    <script>
+        // ------------- 配置与题库 -------------
+        const GAME_CONFIG = {
+            totalQuestions: 10,
+            baseScore: 10
+        };
+
+        // 猜歌题库（格式：{songName: 歌曲名, audioSrc: 音频路径, distractors: 干扰项}）
+        const SONG_BANK = [
+            {
+                songName: "茉莉花",
+                audioSrc: "./songs/clip1.mp3", // 本地音频路径，需与实际文件对应
+                distractors: ["菊花台", "青花瓷", "荷塘月色"]
+            },
+            {
+                songName: "义勇军进行曲",
+                audioSrc: "./songs/clip2.mp3",
+                distractors: ["歌唱祖国", "我和我的祖国", "没有共产党就没有新中国"]
+            },
+            {
+                songName: "让我们荡起双桨",
+                audioSrc: "./songs/clip3.mp3",
+                distractors: ["童年", "乡间的小路", "外婆的澎湖湾"]
+            }
+            // 可继续扩展题库，对应添加本地音频文件
+        ];
+
+        // ------------- 音频核心逻辑 -------------
+        // 获取音频元素和控制按钮
+        const audioElement = document.getElementById("song-audio");
+        const playBtn = document.getElementById("play-audio");
+        const pauseBtn = document.getElementById("pause-audio");
+        const resetBtn = document.getElementById("reset-audio");
+
+        // 播放音频
+        playBtn.addEventListener("click", function() {
+            // 播放前检查音频是否加载完成
+            if (audioElement.readyState >= 2) {
+                audioElement.play().catch(err => {
+                    console.error("音频播放失败：", err);
+                    alert("音频播放失败，请检查文件路径或浏览器权限");
+                });
+            } else {
+                alert("音频正在加载中，请稍候");
+            }
+        });
+
+        // 暂停音频
+        pauseBtn.addEventListener("click", function() {
+            audioElement.pause();
+        });
+
+        // 重置音频（回到开头，暂停状态）
+        resetBtn.addEventListener("click", function() {
+            audioElement.pause();
+            audioElement.currentTime = 0; // 音频进度回到0秒
+        });
+
+        // ------------- 猜歌答题逻辑 -------------
+        // 加载当前题目（初始化第一题）
+        function loadCurrentQuestion(questionIndex = 0) {
+            const currentSong = SONG_BANK[questionIndex];
+            // 更新音频源
+            audioElement.src = currentSong.audioSrc;
+            audioElement.load(); // 重新加载音频
+            audioElement.currentTime = 0; // 重置进度
+
+            // 生成答题选项（1正确+3干扰项，随机排序）
+            const options = [
+                { text: currentSong.songName, isCorrect: true },
+                ...currentSong.distractors.map(distractor => ({ text: distractor, isCorrect: false }))
+            ].sort(() => Math.random() - 0.5); // 随机排序
+
+            // 渲染选项
+            const optionsContainer = document.getElementById("song-options");
+            optionsContainer.innerHTML = "";
+            options.forEach(option => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.textContent = option.text;
+                btn.dataset.correct = option.isCorrect;
+                btn.addEventListener("click", function() {
+                    checkAnswer(this, currentSong.songName);
+                });
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        // 检查答题结果
+        function checkAnswer(optionBtn, correctAnswer) {
+            const isCorrect = optionBtn.dataset.correct === "true";
+            const allOptions = document.querySelectorAll(".option-btn");
+
+            // 禁用所有选项，标记对错
+            allOptions.forEach(btn => {
+                btn.disabled = true;
+                if (btn.dataset.correct === "true") {
+                    btn.classList.add("correct");
+                } else if (btn === optionBtn && !isCorrect) {
+                    btn.classList.add("wrong");
+                }
+            });
+
+            // 暂停音频（答题后停止播放）
+            audioElement.pause();
+
+            // 提示结果
+            if (isCorrect) {
+                alert(`回答正确！正确答案：${correctAnswer}`);
+            } else {
+                alert(`回答错误！正确答案：${correctAnswer}`);
+            }
+        }
+
+        // 初始化游戏（加载第一题）
+        window.onload = function() {
+            loadCurrentQuestion(0);
+        };
+    </script>
+</body>
+</html>
