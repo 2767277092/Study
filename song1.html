@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>听歌识曲 - 随机片段版</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .game-container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 100%;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .start-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .answer-btn {
+      background-color: #2196F3;
+      color: white;
+      display: none;
+      /* 初始隐藏 */
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      opacity: 1;
+    }
+
+    .status-text {
+      margin: 20px 0;
+      font-size: 18px;
+      color: #666;
+      min-height: 24px;
+    }
+
+    .lyrics-container {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      display: none;
+      /* 初始隐藏 */
+    }
+
+    .lyrics-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+      font-size: 18px;
+    }
+
+    .lyrics-content {
+      color: #555;
+      line-height: 1.8;
+      font-size: 16px;
+      white-space: pre-wrap;
+      /* 保留歌词换行 */
+    }
+
+    .clip-info {
+      font-size: 14px;
+      color: #999;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+    <h1>听歌识曲</h1>
+    <p class="status-text">点击开始按钮，随机播放歌曲片段！</p>
+
+    <button class="btn start-btn" id="startBtn">开始游戏</button>
+    <button class="btn answer-btn" id="answerBtn">查看对应歌词</button>
+
+    <div class="lyrics-container" id="lyricsContainer">
+      <div class="lyrics-title" id="lyricsTitle"></div>
+      <div class="lyrics-content" id="lyricsContent"></div>
+      <div class="clip-info" id="clipInfo"></div>
+    </div>
+  </div>
+
+  <script>
+    // 1. 模拟30首完整歌曲数据（核心：完整歌词带时间戳 + 完整音频）
+    // 格式说明：
+    // - duration: 歌曲总时长（秒），模拟3-4分钟的完整歌曲
+    // - lyrics: 完整歌词，每一行包含[时间戳(秒), 歌词内容]
+    const songs = [
+      {
+        id: 1,
+        name: "晴天",
+        singer: "周杰伦",
+        url: "music/qingtian.mp3", // 替换为真实完整音频路径
+        duration: 247, // 歌曲总时长4分07秒（247秒）
+        // 完整歌词（带精准时间戳，你需替换为真实歌词时间戳）
+        lyrics: [
+          [0, "故事的小黄花 从出生那年就飘着"],
+          [5, "童年的荡秋千 随记忆一直晃到现在"],
+          [10, "rui sou sou xi dou xi la"],
+          [15, "sou la xi xi xi la xi la sou"],
+          [20, "吹着前奏望着天空 我想起花瓣试着掉落"],
+          [25, "为你翘课的那一天 花落的那一天"],
+          [30, "教室的那一间 我怎么看不见"],
+          [35, "消失的下雨天 我好想再淋一遍"],
+          [40, "没想到失去的勇气我还留着 好想再问一遍"],
+          [45, "你会等待还是离开"],
+          [50, "刮风这天我试过握着你手 但偏偏雨渐渐"],
+          [55, "大到我看你不见 还要多久"],
+          [60, "我才能在你身边 等到放晴的那天"],
+          [65, "也许我会比较好一点"],
+          [70, "从前从前有个人爱你很久"],
+          [75, "但偏偏风渐渐 把距离吹得好远"],
+          [80, "好不容易又能再多爱一天"],
+          [85, "但故事的最后你好像还是说了拜拜"],
+          [90, "刮风这天我试过握着你手 但偏偏雨渐渐"],
+          [95, "大到我看你不见 还要多久"],
+          [100, "我才能在你身边 等到放晴的那天"],
+          [105, "也许我会比较好一点"],
+          [110, "从前从前有个人爱你很久"],
+          [115, "偏偏风渐渐 把距离吹得好远"],
+          [120, "好不容易又能再多爱一天"],
+          [125, "但故事的最后你好像还是说了拜拜"]
+        ]
+      },
+      {
+        id: 2,
+        name: "七里香",
+        singer: "周杰伦",
+        url: "music/qilixiang.mp3",
+        duration: 233, // 3分53秒
+        lyrics: [
+          [0, "窗外的麻雀 在电线杆上多嘴"],
+          [5, "你说这一句 很有夏天的感觉"],
+          [10, "手中的铅笔 在纸上来来回回"],
+          [15, "我用几行字形容你是我的谁"],
+          [20, "秋刀鱼的滋味 猫跟你都想了解"],
+          [25, "初恋的香味 就这样被我们寻回"],
+          [30, "那温暖的阳光 像刚摘的鲜艳草莓"],
+          [35, "你说你舍不得吃掉 这一种感觉"],
+          [40, "雨下整夜 我的爱溢出就像雨水"],
+          [45, "院子落叶 跟我的思念厚厚一叠"],
+          [50, "几句是非 也无法将我的热情冷却"],
+          [55, "你出现在我诗的每一页"],
+          [60, "雨下整夜 我的爱溢出就像雨水"],
+          [65, "窗台蝴蝶 像诗里纷飞的美丽章节"],
+          [70, "我接着写 把永远爱你写进诗的结尾"],
+          [75, "你是我唯一想要的了解"]
+        ]
+      },
+      // 可按此格式补充剩余28首歌曲...
+      {
+        id: 3,
+        name: "成都",
+        singer: "赵雷",
+        url: "music/chengdu.mp3",
+        duration: 249, // 4分09秒
+        lyrics: [
+          [0, "让我掉下眼泪的 不止昨夜的酒"],
+          [5, "让我依依不舍的 不止你的温柔"],
+          [10, "余路还要走多久 你攥着我的手"],
+          [15, "让我感到为难的 是挣扎的自由"],
+          [20, "分别总是在九月 回忆是思念的愁"],
+          [25, "深秋嫩绿的垂柳 亲吻着我额头"],
+          [30, "在那座阴雨的小城里 我从未忘记你"],
+          [35, "成都 带不走的 只有你"],
+          [40, "和我在成都的街头走一走 喔哦喔哦"],
+          [45, "直到所有的灯都熄灭了也不停留"],
+          [50, "你会挽着我的衣袖 我会把手揣进裤兜"],
+          [55, "走到玉林路的尽头 坐在小酒馆的门口"]
+        ]
+      }
+      // 剩余27首歌曲按相同格式添加...
+    ];
+
+    // 2. 获取DOM元素
+    const startBtn = document.getElementById('startBtn');
+    const answerBtn = document.getElementById('answerBtn');
+    const statusText = document.querySelector('.status-text');
+    const lyricsContainer = document.getElementById('lyricsContainer');
+    const lyricsTitle = document.getElementById('lyricsTitle');
+    const lyricsContent = document.getElementById('lyricsContent');
+    const clipInfo = document.getElementById('clipInfo');
+
+    // 3. 全局变量
+    let currentAudio = null;
+    let currentSong = null;
+    let clipStartTime = 0; // 随机截取的开始时间（秒）
+    const CLIP_DURATION = 15; // 播放片段时长（15秒）
+    const LYRICS_DURATION = 10; // 要展示的后续歌词时长（10秒）
+
+    // 4. 核心工具函数：根据时间范围提取歌词
+    function getLyricsByTimeRange(song, start, end) {
+      let result = [];
+      // 遍历歌词，筛选出时间在[start, end)范围内的歌词
+      for (let [time, text] of song.lyrics) {
+        if (time >= start && time < end) {
+          result.push(text);
+        }
+      }
+      // 如果没有匹配的歌词，返回提示
+      return result.length > 0 ? result.join('\n') : "暂无对应歌词";
+    }
+
+    // 5. 开始游戏逻辑
+    startBtn.addEventListener('click', function () {
+      // 重置状态
+      startBtn.disabled = true;
+      answerBtn.style.display = 'none';
+      lyricsContainer.style.display = 'none';
+      statusText.textContent = "正在加载歌曲...";
+
+      // 1. 随机选择一首歌曲
+      const randomIndex = Math.floor(Math.random() * songs.length);
+      currentSong = songs[randomIndex];
+
+      // 2. 计算可截取的时间范围（避免超出歌曲时长）
+      // 最大开始时间 = 歌曲总时长 - 播放片段时长 - 预留10秒（防止边界）
+      const maxStartTime = currentSong.duration - CLIP_DURATION - 10;
+      // 随机生成截取开始时间（至少从0秒开始）
+      clipStartTime = Math.max(0, Math.floor(Math.random() * maxStartTime));
+
+      // 3. 创建音频对象
+      currentAudio = new Audio(currentSong.url);
+      currentAudio.preload = "metadata"; // 仅预加载元数据（时长）
+
+      // 音频元数据加载完成（获取到时长）
+      currentAudio.addEventListener('loadedmetadata', function () {
+        statusText.textContent = `已选择：${currentSong.name} - ${currentSong.singer}，准备播放${CLIP_DURATION}秒片段...`;
+
+        // 设置音频起始位置
+        currentAudio.currentTime = clipStartTime;
+
+        // 播放音频
+        currentAudio.play().then(() => {
+          statusText.textContent = `正在播放：${currentSong.name}（${clipStartTime}-${clipStartTime + CLIP_DURATION}秒）`;
+
+          // 4. 15秒后暂停音频
+          setTimeout(function () {
+            currentAudio.pause();
+            statusText.textContent = `片段播放完毕！点击"查看对应歌词"按钮，查看${clipStartTime + CLIP_DURATION}-${clipStartTime + CLIP_DURATION + LYRICS_DURATION}秒的歌词`;
+            answerBtn.style.display = 'inline-block';
+            startBtn.disabled = false; // 恢复开始按钮（可重新游戏）
+          }, CLIP_DURATION * 1000);
+
+        }).catch(err => {
+          statusText.textContent = "播放失败：" + err.message;
+          startBtn.disabled = false;
+        });
+      });
+
+      // 音频加载失败处理
+      currentAudio.addEventListener('error', function (err) {
+        statusText.textContent = `歌曲加载失败：${currentSong.name}，请检查音频路径`;
+        startBtn.disabled = false;
+        console.error("音频错误：", err);
+      });
+    });
+
+    // 6. 查看歌词逻辑
+    answerBtn.addEventListener('click', function () {
+      answerBtn.style.display = 'none';
+
+      // 计算要展示的歌词时间范围：
+      // 开始时间 = 截取开始时间 + 播放片段时长（15秒）
+      // 结束时间 = 开始时间 + 要展示的歌词时长（10秒）
+      const lyricsStart = clipStartTime + CLIP_DURATION;
+      const lyricsEnd = lyricsStart + LYRICS_DURATION;
+
+      // 提取对应歌词
+      const targetLyrics = getLyricsByTimeRange(currentSong, lyricsStart, lyricsEnd);
+
+      // 展示歌词
+      lyricsContainer.style.display = 'block';
+      lyricsTitle.textContent = `${currentSong.name} - ${currentSong.singer}`;
+      lyricsContent.textContent = targetLyrics;
+      clipInfo.textContent = `播放片段：${clipStartTime}-${clipStartTime + CLIP_DURATION}秒 | 展示歌词：${lyricsStart}-${lyricsEnd}秒`;
+
+      statusText.textContent = "歌词已展示，点击开始按钮可重新游戏";
+
+      // 重置音频
+      if (currentAudio) {
+        currentAudio.currentTime = 0;
+        currentAudio.pause();
+      }
+    });
+  </script>
+</body>
+
+</html>
