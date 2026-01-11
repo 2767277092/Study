@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>智能计分板</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      padding: 20px;
+    }
+
+    /* 整体布局改为左右结构 */
+    .main-container {
+      display: flex;
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* 左侧操作记录区域 */
+    .operation-log {
+      width: 300px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      height: 520px;
+      /* 固定高度，配合滚动 */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .log-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .log-list {
+      flex: 1;
+      overflow-y: auto;
+      /* 垂直滚动 */
+      gap: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .log-item {
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+
+    .log-content {
+      color: #555;
+    }
+
+    .log-time {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    .delete-log-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.2s;
+    }
+
+    .delete-log-btn:hover {
+      background: #c82333;
+    }
+
+    .empty-log {
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+      padding: 20px;
+    }
+
+    /* 右侧计分板区域 - 保持原有大小不变 */
+    .scoreboard-container {
+      width: 700px;
+      /* 固定宽度，保证排名区域大小不变 */
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      margin: 10px 0;
+      background: #f8f9fa;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    .player-row:nth-child(odd) {
+      background: #f8f9fa;
+    }
+
+    .rank {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: #007bff;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      margin-right: 20px;
+    }
+
+    .player-name {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .player-name:focus {
+      border-color: #007bff;
+    }
+
+    .score {
+      width: 70px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin: 0 20px;
+    }
+
+    .score-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn-add {
+      background: #28a745;
+      color: white;
+    }
+
+    .btn-add:hover {
+      background: #218838;
+    }
+
+    .btn-sub {
+      background: #dc3545;
+      color: white;
+    }
+
+    .btn-sub:hover {
+      background: #c82333;
+    }
+
+    /* 排名样式区分 */
+    .rank-1 {
+      background: #ffd700;
+      color: #333;
+    }
+
+    .rank-2 {
+      background: #c0c0c0;
+      color: #333;
+    }
+
+    .rank-3 {
+      background: #cd7f32;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 新增主容器，包含操作记录和计分板 -->
+  <div class="main-container">
+    <!-- 左侧操作记录区域 -->
+    <div class="operation-log">
+      <div class="log-title">操作记录</div>
+      <div class="log-list" id="log-list">
+        <div class="empty-log">暂无操作记录</div>
+      </div>
+    </div>
+
+    <!-- 右侧计分板区域 -->
+    <div class="scoreboard-container">
+      <h1>计分板</h1>
+      <div id="players-container">
+        <!-- 选手行将通过JS动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 初始化6名选手的数据
+    let players = Array.from({ length: 6 }, (_, index) => ({
+      id: index + 1,
+      name: `选手${index + 1}`,
+      score: 0
+    }));
+
+    // 新增：操作记录数组
+    let operationLogs = [];
+
+    // 获取DOM元素
+    const playersContainer = document.getElementById('players-container');
+    const logList = document.getElementById('log-list');
+
+    // 渲染选手列表（原有功能，保持不变）
+    function renderPlayers() {
+      playersContainer.innerHTML = '';
+
+      const sortedPlayers = [...players].sort((a, b) => {
+        if (b.score !== a.score) {
+          return b.score - a.score;
+        }
+        return a.id - b.id;
+      });
+
+      sortedPlayers.forEach((player, rank) => {
+        const playerRow = document.createElement('div');
+        playerRow.className = 'player-row';
+        playerRow.dataset.playerId = player.id;
+
+        const rankClass = rank < 3 ? `rank-${rank + 1}` : '';
+
+        playerRow.innerHTML = `
+                    <div class="rank ${rankClass}">${rank + 1}</div>
+                    <input type="text" class="player-name" value="${player.name}" data-player-id="${player.id}">
+                    <div class="score">${player.score}</div>
+                    <div class="score-buttons">
+                        <button class="btn btn-add" data-player-id="${player.id}" data-value="1">+1</button>
+                        <button class="btn btn-add" data-player-id="${player.id}" data-value="2">+2</button>
+                        <button class="btn btn-add" data-player-id="${player.id}" data-value="3">+3</button>
+                        <button class="btn btn-sub" data-player-id="${player.id}" data-value="-1">-1</button>
+                        <button class="btn btn-sub" data-player-id="${player.id}" data-value="-2">-2</button>
+                        <button class="btn btn-sub" data-player-id="${player.id}" data-value="-3">-3</button>
+                    </div>
+                `;
+
+        playersContainer.appendChild(playerRow);
+      });
+
+      bindEvents();
+    }
+
+    // 新增：添加操作记录
+    function addOperationLog(playerName, changeValue, oldScore, newScore) {
+      // 构建记录对象
+      const log = {
+        id: Date.now(), // 用时间戳作为唯一ID
+        playerName: playerName,
+        changeValue: changeValue,
+        oldScore: oldScore,
+        newScore: newScore,
+        time: new Date().toLocaleString() // 本地时间格式
+      };
+
+      // 添加到记录数组（插入到开头，最新记录在最上面）
+      operationLogs.unshift(log);
+
+      // 重新渲染记录列表
+      renderOperationLogs();
+    }
+
+    // 新增：渲染操作记录列表
+    function renderOperationLogs() {
+      // 清空记录列表
+      logList.innerHTML = '';
+
+      // 无记录时显示提示
+      if (operationLogs.length === 0) {
+        logList.innerHTML = '<div class="empty-log">暂无操作记录</div>';
+        return;
+      }
+
+      // 渲染每条记录
+      operationLogs.forEach(log => {
+        const logItem = document.createElement('div');
+        logItem.className = 'log-item';
+        logItem.dataset.logId = log.id;
+
+        // 格式化分数变动显示（+号显示，-号保留）
+        const changeText = log.changeValue > 0 ? `+${log.changeValue}` : log.changeValue;
+        const changeColor = log.changeValue > 0 ? '#28a745' : '#dc3545';
+
+        logItem.innerHTML = `
+                    <div class="log-content">
+                        <div><span style="color: ${changeColor}">${log.playerName}</span> ${changeText}分 (${log.oldScore} → ${log.newScore})</div>
+                        <div class="log-time">${log.time}</div>
+                    </div>
+                    <button class="delete-log-btn" data-log-id="${log.id}">删除</button>
+                `;
+
+        logList.appendChild(logItem);
+      });
+
+      // 绑定删除记录事件
+      bindLogDeleteEvents();
+    }
+
+    // 新增：绑定删除记录事件
+    function bindLogDeleteEvents() {
+      document.querySelectorAll('.delete-log-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const logId = parseInt(e.target.dataset.logId);
+          // 过滤掉要删除的记录
+          operationLogs = operationLogs.filter(log => log.id !== logId);
+          // 重新渲染
+          renderOperationLogs();
+        });
+      });
+    }
+
+    // 绑定所有交互事件（修改分数按钮和名字输入）
+    function bindEvents() {
+      // 分数按钮点击事件（修改：添加操作记录）
+      document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const playerId = parseInt(e.target.dataset.playerId);
+          const value = parseInt(e.target.dataset.value);
+
+          // 找到当前选手，记录修改前的分数
+          const currentPlayer = players.find(p => p.id === playerId);
+          const oldScore = currentPlayer.score;
+
+          // 更新分数
+          players = players.map(player => {
+            if (player.id === playerId) {
+              const newScore = Math.max(0, player.score + value);
+              return { ...player, score: newScore };
+            }
+            return player;
+          });
+
+          // 新增：添加操作记录
+          const updatedPlayer = players.find(p => p.id === playerId);
+          addOperationLog(updatedPlayer.name, value, oldScore, updatedPlayer.score);
+
+          // 重新渲染选手列表
+          renderPlayers();
+        });
+      });
+
+      // 名字输入框修改事件（原有功能）
+      document.querySelectorAll('.player-name').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const playerId = parseInt(e.target.dataset.playerId);
+          const newName = e.target.value.trim() || `选手${playerId}`;
+
+          players = players.map(player => {
+            if (player.id === playerId) {
+              return { ...player, name: newName };
+            }
+            return player;
+          });
+
+          renderPlayers();
+        });
+      });
+    }
+
+    // 初始渲染
+    renderPlayers();
+    renderOperationLogs(); // 新增：初始化渲染操作记录
+  </script>
+</body>
+
+</html>
