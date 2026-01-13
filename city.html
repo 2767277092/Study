@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猜省份小游戏</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+      background-color: #f5f7fa;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .game-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 800px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .progress {
+      text-align: center;
+      font-size: 18px;
+      color: #34495e;
+      margin-bottom: 20px;
+      padding: 10px;
+      background-color: #ecf0f1;
+      border-radius: 8px;
+    }
+
+    .hint-section {
+      margin-bottom: 25px;
+    }
+
+    .hint-title {
+      font-size: 20px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .hint-box {
+      background-color: #e8f4fd;
+      padding: 15px;
+      border-radius: 8px;
+      min-height: 60px;
+      font-size: 18px;
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    #get-hint {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #get-hint:hover {
+      background-color: #2980b9;
+    }
+
+    #get-hint:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    .options-section {
+      margin-bottom: 25px;
+    }
+
+    .options-title {
+      font-size: 20px;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .option-btn {
+      padding: 12px;
+      border: 2px solid #bdc3c7;
+      border-radius: 8px;
+      background-color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .option-btn:hover {
+      border-color: #3498db;
+      background-color: #f8fbfe;
+    }
+
+    .option-btn.selected {
+      border-color: #3498db;
+      background-color: #e8f4fd;
+    }
+
+    .option-btn.correct {
+      border-color: #27ae60;
+      background-color: #eafaf1;
+      color: #27ae60;
+      font-weight: bold;
+    }
+
+    .option-btn.wrong {
+      border-color: #e74c3c;
+      background-color: #fdedeb;
+      color: #e74c3c;
+    }
+
+    .option-btn.disabled {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .nav-btn {
+      background-color: #2ecc71;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .nav-btn:hover {
+      background-color: #27ae60;
+    }
+
+    .nav-btn:disabled {
+      background-color: #bdc3c7;
+      cursor: not-allowed;
+    }
+
+    #prev-btn {
+      background-color: #9b59b6;
+    }
+
+    #prev-btn:hover {
+      background-color: #8e44ad;
+    }
+
+    @media (max-width: 600px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .game-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="game-container">
+    <h1>猜省份小游戏</h1>
+    <div class="progress">当前题目：<span id="current-question">1</span>/50</div>
+
+    <div class="hint-section">
+      <div class="hint-title">提示（已解锁 <span id="hint-count">1</span>/5）：</div>
+      <div class="hint-box" id="hint-display">加载中...</div>
+      <button id="get-hint">获取下一个提示</button>
+    </div>
+
+    <div class="options-section">
+      <div class="options-title">请选择正确的省份：</div>
+      <div class="options-grid" id="options-container"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button id="prev-btn" class="nav-btn" disabled>上一题</button>
+      <button id="next-btn" class="nav-btn">下一题</button>
+    </div>
+  </div>
+
+  <script>
+    // 1. 省份数据（每个省份8-10个提示，按关联度从低到高，饮食类放最后）
+    const provinceData = [
+      {
+        name: "北京市",
+        hints: [
+          "位于中国北部地区",          // 通用（关联度最低）
+          "属于国家级直辖市",          // 行政属性
+          "地势西北高、东南低",        // 自然地理
+          "高新技术产业高度发达",      // 支柱产业
+          "拥有众多皇家园林建筑",      // 人文
+          "全国政治文化中心",          // 城市定位
+          "金融服务业占比高",          // 产业
+          "冬季气候较为寒冷",          // 气候
+          "高校数量居全国前列",        // 人文
+          "炸酱面是当地特色面食"       // 饮食（最后）
+        ]
+      },
+      {
+        name: "上海市",
+        hints: [
+          "位于中国东部沿海",          // 通用
+          "属于国家级直辖市",          // 行政属性
+          "地处长江入海口",            // 自然地理
+          "航运和贸易产业发达",        // 支柱产业
+          "国际化大都市",              // 城市定位
+          "制造业基础雄厚",            // 产业
+          "亚热带季风气候",            // 气候
+          "河网密布，水资源丰富",      // 自然
+          "民营经济活跃度高",          // 经济
+          "本帮菜以甜口为主"           // 饮食
+        ]
+      },
+      {
+        name: "江苏省",
+        hints: [
+          "位于华东地区",              // 通用
+          "地势以平原为主，非常平坦",  // 自然地理
+          "长三角核心区域",            // 地理定位
+          "制造业强省，工业发达",      // 支柱产业
+          "被称为鱼米之乡",            // 人文
+          "旅游业十分发达",            // 产业
+          "水资源丰富，河湖众多",      // 自然
+          "方言种类丰富多样",          // 人文
+          "民营经济占比高",            // 经济
+          "淮扬菜是当地代表菜系"       // 饮食
+        ]
+      },
+      {
+        name: "广东省",
+        hints: [
+          "位于中国南部沿海",          // 通用
+          "地势以丘陵、山地为主",      // 自然地理
+          "珠三角经济核心区",          // 地理定位
+          "外贸和制造业是支柱产业",    // 支柱产业
+          "常住人口数量全国第一",      // 人文
+          "海洋资源丰富",              // 自然
+          "亚热带湿润气候",            // 气候
+          "侨乡数量多",                // 人文
+          "电子信息产业领先",          // 产业
+          "粤菜口味清淡、注重原味"     // 饮食
+        ]
+      },
+      {
+        name: "四川省",
+        hints: [
+          "位于中国西南地区",          // 通用
+          "地势西高东低，多山地",      // 自然地理
+          "地处四川盆地",              // 地理定位
+          "旅游业和水电产业发达",      // 支柱产业
+          "多民族聚居地区",            // 人文
+          "气候湿润，多阴雨",          // 气候
+          "矿产资源丰富",              // 自然
+          "川剧是特色戏曲",            // 人文
+          "白酒产业全国知名",          // 产业
+          "川菜以麻辣口味为特色"       // 饮食
+        ]
+      },
+      {
+        name: "浙江省",
+        hints: [
+          "位于华东沿海地区",          // 通用
+          "多山地丘陵，少平原",        // 自然地理
+          "长三角重要组成部分",        // 地理定位
+          "民营经济是经济主体",        // 支柱产业
+          "电子商务产业发达",          // 产业
+          "海岸线曲折，港口众多",      // 自然
+          "亚热带季风气候",            // 气候
+          "西湖是知名旅游景点",        // 人文
+          "浙商文化影响广泛",          // 人文
+          "杭帮菜注重清鲜脆嫩"         // 饮食
+        ]
+      },
+      {
+        name: "山东省",
+        hints: [
+          "位于中国华东沿海",          // 通用
+          "地势中部高、四周低",        // 自然地理
+          "黄河入海口所在地",          // 地理定位
+          "农业和重工业发达",          // 支柱产业
+          "孔孟文化发源地",            // 人文
+          "温带季风气候",              // 气候
+          "海岸线长，渔业发达",        // 自然
+          "人口大省，劳动力丰富",      // 人文
+          "石化产业基础雄厚",          // 产业
+          "鲁菜是八大菜系之首"         // 饮食
+        ]
+      },
+      {
+        name: "河南省",
+        hints: [
+          "位于中国华中地区",          // 通用
+          "地势平坦，以平原为主",      // 自然地理
+          "黄河中下游流域",            // 地理定位
+          "农业是核心支柱产业",        // 支柱产业
+          "中原文化发源地",            // 人文
+          "温带季风气候",              // 气候
+          "人口数量多，劳动力充足",    // 人文
+          "交通枢纽地位突出",          // 交通
+          "食品加工产业发达",          // 产业
+          "豫菜注重五味调和"           // 饮食
+        ]
+      },
+      {
+        name: "云南省",
+        hints: [
+          "位于中国西南边陲",          // 通用
+          "地势崎岖，多高原山地",      // 自然地理
+          "与多个东南亚国家接壤",      // 地理定位
+          "旅游业是支柱产业",          // 支柱产业
+          "少数民族种类最多",          // 人文
+          "立体气候特征明显",          // 气候
+          "生物资源极其丰富",          // 自然
+          "普洱茶产业知名",            // 产业
+          "滇剧是地方特色戏曲",        // 人文
+          "过桥米线是特色美食"         // 饮食
+        ]
+      },
+      {
+        name: "陕西省",
+        hints: [
+          "位于中国西北地区",          // 通用
+          "地势南北高、中间低",        // 自然地理
+          "黄河中游流域",              // 地理定位
+          "能源化工产业发达",          // 支柱产业
+          "十三朝古都所在地",          // 人文
+          "温带大陆性气候",            // 气候
+          "煤炭资源储量丰富",          // 自然
+          "历史文化遗迹众多",          // 人文
+          "航空航天产业领先",          // 产业
+          "肉夹馍是特色小吃"           // 饮食
+        ]
+      },
+      {
+        name: "湖南省",
+        hints: [
+          "位于中国中南地区",          // 通用
+          "地势以山地、丘陵为主",      // 自然地理
+          "长江中游流域",              // 地理定位
+          "工程机械产业发达",          // 支柱产业
+          "湖湘文化底蕴深厚",          // 人文
+          "亚热带季风气候",            // 气候
+          "水资源和林业资源丰富",      // 自然
+          "红色旅游资源丰富",          // 人文
+          "烟花产业全国知名",          // 产业
+          "湘菜以香辣口味为特色"       // 饮食
+        ]
+      },
+      {
+        name: "湖北省",
+        hints: [
+          "位于中国华中地区",          // 通用
+          "地势东低西高，多山地",      // 自然地理
+          "长江和汉江交汇处",          // 地理定位
+          "汽车制造业是支柱产业",      // 支柱产业
+          "九省通衢，交通便利",        // 交通
+          "亚热带季风气候",            // 气候
+          "淡水渔业发达",              // 自然
+          "楚文化发源地",              // 人文
+          "光电子信息产业领先",        // 产业
+          "热干面是特色小吃"           // 饮食
+        ]
+      }
+    ];
+
+    // 2. 全局变量
+    let currentQuestionIndex = 0;    // 当前题目索引
+    let gameQuestions = [];          // 50道游戏题目
+    let userAnswers = [];            // 用户答题记录
+    let isAnswered = false;          // 新增：标记当前题是否已答题
+
+    // 3. 初始化游戏：生成50道题目（确保所有省份至少出现一次）
+    function initGame() {
+      // 步骤1：先把所有省份加入（确保至少出现一次）
+      const baseProvinces = [...provinceData];
+      // 步骤2：随机补充到50题
+      while (baseProvinces.length < 50) {
+        const randomProvince = provinceData[Math.floor(Math.random() * provinceData.length)];
+        baseProvinces.push(randomProvince);
+      }
+      // 步骤3：为每道题生成随机5个提示（按关联度排序）和10个备选选项
+      gameQuestions = baseProvinces.map(province => {
+        // 随机抽取5个提示（从8-10个中选5个，保持原有排序）
+        const allHints = province.hints;
+        const shuffledHints = [...allHints].sort(() => 0.5 - Math.random()); // 先打乱
+        const selectedHints = shuffledHints.slice(0, 5).sort((a, b) => {
+          // 恢复原关联度排序（按在原数组中的索引）
+          return allHints.indexOf(a) - allHints.indexOf(b);
+        });
+
+        // 生成10个备选选项（1个正确+9个干扰项，干扰项至少符合一个提示）
+        const correctProvince = province;
+        const wrongProvinces = [];
+        // 筛选干扰项：至少符合当前题一个提示
+        provinceData.forEach(p => {
+          if (p.name !== correctProvince.name && wrongProvinces.length < 9) {
+            // 检查是否至少符合一个提示
+            const hasMatch = selectedHints.some(hint => p.hints.includes(hint));
+            if (hasMatch) {
+              wrongProvinces.push(p);
+            }
+          }
+        });
+        // 如果符合条件的干扰项不足，补充随机省份
+        while (wrongProvinces.length < 9) {
+          const randomP = provinceData[Math.floor(Math.random() * provinceData.length)];
+          if (randomP.name !== correctProvince.name && !wrongProvinces.includes(randomP)) {
+            wrongProvinces.push(randomP);
+          }
+        }
+        // 合并正确选项+干扰项，然后打乱
+        const allOptions = [correctProvince, ...wrongProvinces].sort(() => 0.5 - Math.random());
+
+        return {
+          province: correctProvince,
+          hints: selectedHints,
+          options: allOptions.map(p => p.name)
+        };
+      });
+
+      // 初始化答题记录
+      userAnswers = new Array(50).fill(null);
+
+      // 渲染第一题
+      renderQuestion(currentQuestionIndex);
+    }
+
+    // 4. 渲染当前题目
+    function renderQuestion(index) {
+      const question = gameQuestions[index];
+      isAnswered = userAnswers[index] !== null; // 重置：标记当前题是否已答题
+
+      // 更新进度
+      document.getElementById("current-question").textContent = index + 1;
+
+      // 渲染提示（初始显示第1个）
+      const hintDisplay = document.getElementById("hint-display");
+      const hintCount = document.getElementById("hint-count");
+      hintDisplay.textContent = question.hints[0];
+      hintCount.textContent = 1;
+      // 重置获取提示按钮状态
+      const getHintBtn = document.getElementById("get-hint");
+      getHintBtn.disabled = false;
+
+      // 渲染选项
+      const optionsContainer = document.getElementById("options-container");
+      optionsContainer.innerHTML = "";
+      question.options.forEach(option => {
+        const btn = document.createElement("button");
+        btn.className = "option-btn";
+        btn.textContent = option;
+        btn.dataset.province = option;
+
+        // 如果已答题，直接显示对错并禁用选项
+        if (isAnswered) {
+          const correctAnswer = question.province.name;
+          if (option === correctAnswer) {
+            btn.classList.add("correct");
+          } else if (option === userAnswers[index]) {
+            btn.classList.add("wrong");
+          }
+          btn.disabled = true; // 禁用已答题的选项
+          btn.classList.add("disabled");
+        }
+
+        // 选项点击事件（核心修改：点击后立即判断对错）
+        btn.addEventListener("click", () => {
+          if (isAnswered) return; // 已答题则不再响应
+
+          const correctAnswer = question.province.name;
+          const selectedOption = option;
+
+          // 记录答案
+          userAnswers[index] = selectedOption;
+          isAnswered = true;
+
+          // 遍历所有选项，标记对错并禁用
+          document.querySelectorAll(".option-btn").forEach(btn => {
+            const btnProvince = btn.dataset.province;
+            if (btnProvince === correctAnswer) {
+              btn.classList.add("correct");
+            } else if (btnProvince === selectedOption) {
+              btn.classList.add("wrong");
+            }
+            btn.disabled = true; // 禁用所有选项，避免重复点击
+            btn.classList.add("disabled");
+          });
+        });
+
+        optionsContainer.appendChild(btn);
+      });
+
+      // 更新导航按钮状态
+      document.getElementById("prev-btn").disabled = index === 0;
+      document.getElementById("next-btn").disabled = index === 49;
+    }
+
+    // 5. 获取下一个提示
+    document.getElementById("get-hint").addEventListener("click", () => {
+      const currentHintCount = parseInt(document.getElementById("hint-count").textContent);
+      const maxHints = 5;
+
+      if (currentHintCount < maxHints) {
+        const newCount = currentHintCount + 1;
+        document.getElementById("hint-count").textContent = newCount;
+        document.getElementById("hint-display").textContent = gameQuestions[currentQuestionIndex].hints[newCount - 1];
+
+        // 如果到最后一个提示，禁用按钮
+        if (newCount === maxHints) {
+          document.getElementById("get-hint").disabled = true;
+        }
+      }
+    });
+
+    // 6. 下一题按钮事件
+    document.getElementById("next-btn").addEventListener("click", () => {
+      if (currentQuestionIndex < 49) {
+        currentQuestionIndex++;
+        renderQuestion(currentQuestionIndex);
+      }
+    });
+
+    // 7. 上一题按钮事件
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion(currentQuestionIndex);
+      }
+    });
+
+    // 初始化游戏
+    window.onload = initGame;
+  </script>
+</body>
+
+</html>
