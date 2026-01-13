@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>歌曲接龙挑战</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft Yahei", sans-serif;
+    }
+
+    body {
+      background-color: #f0f2f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      opacity: 0.9;
+    }
+
+    .game-container {
+      background-color: transparent;
+      border-radius: 20px;
+      padding: 40px 30px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+      width: 95%;
+      max-width: 900px;
+      min-height: 80vh;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+    }
+
+    .left-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .timer-label {
+      font-size: 2rem;
+      color: #2d3748;
+      font-weight: 500;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .timer-box {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 25px 45px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      font-size: 3.8rem;
+      color: #3b82f6;
+      font-weight: 700;
+    }
+
+    .right-section {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      align-items: center;
+      width: 100%;
+    }
+
+    h1 {
+      color: #2d3748;
+      font-size: 3rem;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+    }
+
+    .control-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .skip-buttons {
+      display: flex;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .btn {
+      padding: 22px 0;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.8rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      opacity: 0.5;
+      color: white;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      opacity: 0.8;
+      transform: scale(1.02);
+    }
+
+    .btn-start {
+      background-color: #3b82f6;
+      color: white;
+    }
+
+    .btn-resume {
+      background-color: #ef4444;
+    }
+
+    .btn-end-song {
+      background-color: #f97316;
+    }
+
+    .btn-skip {
+      background-color: #a855f7;
+    }
+
+    .btn-next {
+      background-color: #3b82f6;
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    @media (max-width: 768px) {
+      .game-container {
+        flex-direction: column;
+        min-height: auto;
+        padding: 30px 20px;
+      }
+
+      .left-section,
+      .right-section {
+        flex: none;
+        width: 100%;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .timer-label {
+        font-size: 1.5rem;
+      }
+
+      .timer-box {
+        font-size: 2.8rem;
+        padding: 20px 35px;
+      }
+
+      .btn {
+        font-size: 1.5rem;
+        padding: 18px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="videoplayback.webm" type="video/mp4">
+    你的浏览器不支持视频播放，请升级浏览器
+  </video>
+
+  <div class="game-container">
+    <div class="left-section">
+      <p class="timer-label">答题计时</p>
+      <div id="timerDisplay" class="timer-box">00.00</div>
+    </div>
+
+    <div class="right-section">
+      <h1>歌曲接龙挑战</h1>
+      <div class="control-buttons">
+        <button id="startBtn" class="btn btn-start">开始游戏</button>
+        <button id="pauseBtn" class="btn btn-resume" disabled>继续播放</button>
+        <button id="endSongBtn" class="btn btn-end-song" disabled>本歌曲结束</button>
+
+        <div class="skip-buttons">
+          <button id="backBtn" class="btn btn-skip" disabled>回退3秒</button>
+          <button id="forwardBtn" class="btn btn-skip" disabled>前进3秒</button>
+        </div>
+
+        <button id="nextBtn" class="btn btn-next" disabled>下一首</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const songList = [
+      { id: 1, src: "孙燕姿 - 我怀念的.mp3" },
+      { id: 2, src: "王贰浪 - 把回忆拼好给你.mp3" },
+      { id: 3, src: "赵雷 - 成都.mp3" },
+      { id: 4, src: "过火.mp3" },
+      { id: 5, src: "晴天.mp3" },
+      { id: 6, src: "0919.mp3" },
+      { id: 7, src: "动物世界.mp3" },
+      { id: 8, src: "江南.mp3" },
+      { id: 9, src: "水手.mp3" },
+      { id: 10, src: "王妃.mp3" },
+      { id: 11, src: "演员.mp3" },
+      { id: 12, src: "爱情讯息.mp3" },
+      { id: 13, src: "坠落.mp3" },
+      { id: 14, src: "演员.mp3" },
+      { id: 15, src: "传奇.mp3" },
+      { id: 16, src: "在你的身边.mp3" }
+    ];
+
+    const audio = new Audio();
+    let lastSongIndex = -1;
+    let isPlaying = false;
+    let timerInterval = null;
+    let elapsedTime = 0;
+
+    const startBtn = document.getElementById("startBtn");
+    const pauseBtn = document.getElementById("pauseBtn");
+    const endSongBtn = document.getElementById("endSongBtn");
+    const backBtn = document.getElementById("backBtn");
+    const forwardBtn = document.getElementById("forwardBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const timerDisplay = document.getElementById("timerDisplay");
+
+    function getRandomSongIndex() {
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * songList.length);
+      } while (randomIndex === lastSongIndex && songList.length > 1);
+      lastSongIndex = randomIndex;
+      return randomIndex;
+    }
+
+    function updateTimerDisplay() {
+      timerDisplay.textContent = elapsedTime.toFixed(2);
+    }
+
+    // 优化计时器逻辑：仅在新歌曲开始时重置计时
+    function startTimer(reset = false) {
+      if (timerInterval) clearInterval(timerInterval);
+      // 只有传reset=true时才重置计时（新歌曲开始）
+      if (reset) {
+        elapsedTime = 0;
+      }
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        elapsedTime += 0.1;
+        updateTimerDisplay();
+      }, 100);
+    }
+
+    function pauseTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+    }
+
+    function resetTimer() {
+      pauseTimer();
+      elapsedTime = 0;
+      updateTimerDisplay();
+    }
+
+    function playRandomSongFragment() {
+      audio.pause();
+      const randomIndex = getRandomSongIndex();
+      const selectedSong = songList[randomIndex];
+      audio.src = selectedSong.src;
+
+      audio.addEventListener("loadedmetadata", function onMetadataLoaded() {
+        audio.removeEventListener("loadedmetadata", onMetadataLoaded);
+
+        const duration = audio.duration;
+        if (duration <= 60) {
+          alert(`歌曲时长不足60秒，无法播放有效片段！`);
+          resetButtonStates();
+          return;
+        }
+
+        const minPlayTime = 30;
+        const maxPlayTime = duration - 30;
+        const randomPlayTime = minPlayTime + Math.random() * (maxPlayTime - minPlayTime);
+
+        audio.currentTime = randomPlayTime;
+        audio.play().then(() => {
+          isPlaying = true;
+          // 新歌曲开始，传reset=true重置计时
+          startTimer(true);
+          startBtn.disabled = true;
+          pauseBtn.disabled = false;
+          endSongBtn.disabled = false;
+          backBtn.disabled = false;
+          forwardBtn.disabled = false;
+          nextBtn.disabled = false;
+          pauseBtn.textContent = "暂停播放";
+        }).catch(err => {
+          console.error("播放失败：", err);
+          alert("播放失败，请检查音源路径是否正确！");
+          resetButtonStates();
+        });
+      });
+    }
+
+    function resetButtonStates() {
+      isPlaying = false;
+      resetTimer();
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      endSongBtn.disabled = true;
+      backBtn.disabled = true;
+      forwardBtn.disabled = true;
+      nextBtn.disabled = true;
+      pauseBtn.textContent = "继续播放";
+    }
+
+    function skipBackward() {
+      if (!isPlaying) return;
+      audio.currentTime = Math.max(0, audio.currentTime - 3);
+    }
+
+    function skipForward() {
+      if (!isPlaying) return;
+      audio.currentTime = Math.min(audio.duration, audio.currentTime + 3);
+    }
+
+    function endCurrentSong() {
+      audio.pause();
+      resetButtonStates();
+    }
+
+    startBtn.addEventListener("click", playRandomSongFragment);
+
+    pauseBtn.addEventListener("click", function () {
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        pauseBtn.textContent = "继续播放";
+        // 暂停仅停止计时，不重置时间
+        pauseTimer();
+      } else {
+        audio.play();
+        isPlaying = true;
+        pauseBtn.textContent = "暂停播放";
+        // 继续播放时，传reset=false保留之前的计时
+        startTimer();
+      }
+    });
+
+    endSongBtn.addEventListener("click", endCurrentSong);
+    backBtn.addEventListener("click", skipBackward);
+    forwardBtn.addEventListener("click", skipForward);
+
+    nextBtn.addEventListener("click", function () {
+      resetTimer();
+      playRandomSongFragment();
+    });
+
+    audio.addEventListener("ended", resetButtonStates);
+  </script>
+</body>
+
+</html>
