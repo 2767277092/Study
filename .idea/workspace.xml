@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="461a46b3-2b3d-4794-be4f-2fa687f1e890" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/06列表去重.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/07 列表练习.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/08 字符串.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/undercover.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/word.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python-project01/第二章/09元组.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/python-project01/第二章/10集合.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python-project01/第二章/数据容器.py" beforeDir="false" afterPath="$PROJECT_DIR$/python-project01/第二章/02数据容器.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python-project01/第二章/数据类型.py" beforeDir="false" afterPath="$PROJECT_DIR$/python-project01/第二章/01数据类型.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/笔记.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/note.md" beforeDir="false" afterPath="$PROJECT_DIR$/note.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python-project01/第二章/08 字符串.py" beforeDir="false" afterPath="$PROJECT_DIR$/python-project01/第二章/08 字符串.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,21 +32,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.08 字符串.executor&quot;: &quot;Run&quot;,
-    &quot;Python.word.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.08 字符串.executor": "Run",
+    "Python.10集合.executor": "Run",
+    "Python.word.executor": "Run",
+    "Python.元组.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "master",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected="Python.word">
+}]]></component>
+  <component name="RunManager" selected="Python.10集合">
     <configuration name="08 字符串" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="0python" />
       <option name="ENV_FILES" value="" />
@@ -66,6 +65,54 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/python-project01/第二章/08 字符串.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="09元组" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="0python" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/python-project01/第二章" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="D:\0python\python-project01\第二章\09元组.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="10集合" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="0python" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/python-project01/第二章" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/python-project01/第二章/10集合.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -100,8 +147,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.word" />
+        <item itemvalue="Python.10集合" />
+        <item itemvalue="Python.09元组" />
         <item itemvalue="Python.08 字符串" />
+        <item itemvalue="Python.word" />
       </list>
     </recent_temporary>
   </component>
@@ -125,6 +174,8 @@
       <workItem from="1769227198319" duration="59000" />
       <workItem from="1769227279459" duration="2024000" />
       <workItem from="1769253271365" duration="1020000" />
+      <workItem from="1769255975128" duration="6694000" />
+      <workItem from="1769306999991" duration="2502000" />
     </task>
     <servers />
   </component>
@@ -132,7 +183,9 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/0python$08_.coverage" NAME="08 字符串 覆盖结果" MODIFIED="1769227670812" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python-project01/第二章" />
+    <SUITE FILE_PATH="coverage/0python$08_.coverage" NAME="08 字符串 覆盖结果" MODIFIED="1769258331460" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python-project01/第二章" />
+    <SUITE FILE_PATH="coverage/0python$.coverage" NAME="元组 覆盖结果" MODIFIED="1769263396760" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python-project01/第二章" />
     <SUITE FILE_PATH="coverage/0python$word.coverage" NAME="word 覆盖结果" MODIFIED="1769254277248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/0python$10.coverage" NAME="10集合 覆盖结果" MODIFIED="1769309648126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/python-project01/第二章" />
   </component>
 </project>
