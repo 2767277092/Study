@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="461a46b3-2b3d-4794-be4f-2fa687f1e890" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/09元组.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/10集合.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/note.md" beforeDir="false" afterPath="$PROJECT_DIR$/note.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python-project01/第二章/08 字符串.py" beforeDir="false" afterPath="$PROJECT_DIR$/python-project01/第二章/08 字符串.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python-project01/第二章/11字典.py" beforeDir="false" afterPath="$PROJECT_DIR$/python-project01/第二章/11字典.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,22 +28,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.08 字符串.executor": "Run",
-    "Python.10集合.executor": "Run",
-    "Python.word.executor": "Run",
-    "Python.元组.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "master",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.08 字符串.executor&quot;: &quot;Run&quot;,
+    &quot;Python.10集合.executor&quot;: &quot;Run&quot;,
+    &quot;Python.word.executor&quot;: &quot;Run&quot;,
+    &quot;Python.元组.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.10集合">
     <configuration name="08 字符串" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="0python" />
@@ -176,6 +172,7 @@
       <workItem from="1769253271365" duration="1020000" />
       <workItem from="1769255975128" duration="6694000" />
       <workItem from="1769306999991" duration="2502000" />
+      <workItem from="1769387988122" duration="29000" />
     </task>
     <servers />
   </component>
