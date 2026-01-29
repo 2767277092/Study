@@ -1,16 +1,52 @@
-<P> 三引号 大量字符  可以自主换行
 
-### 转义字符
 
-<p>           \'        and   \"   and   \n     换行符 and  \t   缩进等于ta
+### 快捷键
 
-### 字符串的转接
+alt+shift    选中不同行
+
+shift+tab删除缩进
+
+
+
+### 运算符
+
+#### match
+
+- match   choice:
+
+​	case "1":
+
+​	case  _:  其他情况(直接  下划线不要别的)
+
+#### if in
+
+  if  value in list/dict:
+
+#### while true+break
+
+无限循环+主动终止 
+
+break仅终止所在那一层 若为嵌套不影响外层循环
+
+​       
+
+ 字符串
+
+#### 字符
+
+三引号 大量字符  可以自主换行
+
+
+
+​         \'        and   \"   and   \n     换行符 and  \t   缩进等于ta
+
+#### 字符串的转接
 
 <p> 字符串之间可以直接写  或者+    
 
 <p>字符串和其他类型得用+  ex.:  "字符串"+ a
 
-### 字符串的格式化
+#### 字符串的格式化
 
 <p>    ex.:         print("这是 %s" %s1)            print("这是 %s   ,%s " %(s1,s2)) 
 
@@ -22,7 +58,7 @@ for s in student:        (在student中遍历)
 
 ### 数据容器
 
-#### 列表List   
+#### 列表List
 
 有序 可重复  可修改
 
@@ -50,7 +86,7 @@ if  num in/  not in  list:  判断元素是否存在于列表   返回True  或F
 
 列表推导式:  list1=[i**2 for i in range(1,21)]
 
-####   字符串Str   
+#### 字符串Str
 
 特点: 不可修改  有序性 可迭代性   (可通过for循环迭代输出)
 
@@ -74,7 +110,7 @@ replace()       s.replace('h','c')  将字符串中的指定字串替换为新�
 
 startswith()   s.startswith() 检查字符串是否以指定字串开头 返回布尔值
 
-####         元组tuple      
+#### 元组tuple
 
 有序 可重复 不可修改
 
@@ -94,9 +130,9 @@ count()   用于统计某元素出现的次数
 
 index()  统计某元素的出现的索引位置(多个重复则 返回第一个)
 
-####         集合set       
+#### 集合set
 
-  无序  不可重复 可修改  (不支持下标索引访问)
+  #无序  不可重复 可修改  (不支持下标索引访问)
 
 定义:     s1={"c","x"}       定义空集合 s2=set()       {}表示空字典
 
@@ -114,7 +150,47 @@ s1.intersection(s2)   {s1|s2}  求交集
 
 
 
-####             字典dirt
+#### 字典dict
+
+ 定义:dict={"key":value}    空字典: dic1={}    dict2=dict()  
+
+键值对     键不能重复 可修改  value任意类型  key为不可变类型(不可为List set dict)
+
+常用操作:
+
+访问   print(dict["key1"])        修改:dict["key"]=value1
+
+增加 : dict1["key1"]=value1    
+
+删除:   
+
+score=dict1.pop("key1")  删除并返回Key对应的value      
+
+del dict1("key1")仅删除 
+
+修改:   dict['key1']=value2
+
+查询:  根据Key获取value  dict["key1"]   /   dict1.get("key1")
+
+获取所有的Key   dict1.keys()  获取所有的value  dict1.values()
+
+获取所有的键值对 dict1.items   
+
+#### 总结
+
+![](E:\录像\屏幕截图 2026-01-29 201328.png)
+
+
+
+
+
+## 函数
+
+定义函数 def 函数名(参数列表):
+
+​		    函数体
+
+​		    return 返回值
 
 
 
