@@ -14,13 +14,19 @@ shift+tab删除缩进
 
 - match   choice:
 
-​	case "1":
+		case "1":
 
-​	case  _:  其他情况(直接  下划线不要别的)
+		case  _:  #其他情况(直接  下划线不要别的)
 
 #### if in
 
-  if  value in list/dict:
+  
+
+```
+if  value in list/dict:
+```
+
+
 
 #### while true+break
 
@@ -28,9 +34,11 @@ shift+tab删除缩进
 
 break仅终止所在那一层 若为嵌套不影响外层循环
 
-​       
+####      round  
 
- 字符串
+round(value,1)      用来限制小数位数  
+
+###  字符串
 
 #### 字符
 
@@ -186,14 +194,51 @@ del dict1("key1")仅删除
 
 ## 函数
 
-定义函数 def 函数名(参数列表):
+### 定义函数 
 
-​		    函数体
+```
+def 函数名(参数列表):
+	函数
+	return 返回值
+```
 
-​		    return 返回值
+### 返回多个值
 
+return a,b,c          会输出一个元组  (a,b,c)   
 
+相应的 可以利用解包操作 获取多个输出值    
 
+### 函数的说明文档
 
+```
+def function()
+	"""
+	此处进行说明
+	"""
+	return 
+    
+    
+ help(function)  查看说明文档 注意function后面!不要括号!
+```
+
+### 嵌套调用
+
+ 函数的调用遵循栈规则   后进先出
+
+```
+def function_a()
+	print("a_before")
+	function_b()
+	print("a_after")
+def function_b()
+	print("b_before")
+	function_c()
+	print("b_after)
+def function_c()
+	print("c")
+顺序:a_before	->b_befor->c->b_after->a_after	
+```
+
+w
 
  
