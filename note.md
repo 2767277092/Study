@@ -38,7 +38,17 @@ break仅终止所在那一层 若为嵌套不影响外层循环
 
 round(value,1)      用来限制小数位数  
 
-###  字符串
+#### global 
+
+```
+global  num1
+num1=100
+:声明函数内的该变量为全局变量    !先声明 在使用
+```
+
+
+
+###   字符串
 
 #### 字符
 
@@ -257,6 +267,92 @@ def function_c()
 顺序:a_before	->b_befor->c->b_after->a_after	
 ```
 
-w
+### 函数的传参方式
+
+位置传参(顺序一致)
+
+ 关键字参数                **若位置参数与关键字参数混用 关键字参数必须在后面**
+
+```
+def reg_stu(name, age, gender, city):
+    print(f"注册成功,姓名:{name}, 年龄:{age}, 性别:{gender}, 城市:{city}")
+    return {"name": name, "age": age, "gender": gender, "city": city}
+
+# 调用函数
+stu = reg_stu(name="张三", age=18, gender="男", city="北京")
+print(stu)
+
+stu2 = reg_stu(gender="男", name="王武", city="上海", age=22)
+print(stu2)
+
+stu2 = reg_stu("赵四", 28, gender="男", city="上海")
+print(stu2)
+```
+
+
+
+###  不定长参数
+
+用于参数个数不确定的场景  类型分为:**位置传递**和**关键字传递**
+
+```
+#基于位置传递的不定长参数
+def calc_data(*args):
+	min_data=min(args)
+	max_data=max(args)
+	avg_data=sum(args)/len(args)
+	
+
+data=function(10,20,30,40,50)
+#传递的所有匹配的位置参数都会被args变量收集 合并封装为一个元组
+#args为元组类型 (注意并不会封装关键字参数) 
+```
+
+
+
+```
+#基于关键字的不定长参数 
+def calc_data(*args.**kwrgs): #封装到字典
+	min_data=min(args)
+	max_data=max(args)
+	avg_data=sum(args)/len(args)
+	
+	if kwrgs.get("round") is not None:
+		avg_data=round(avg_data,kwargs.get("round"))
+	if kwrgs.get("print"):
+		print(f"计算出的最小值为{min_data},最大值为{max_data},平均值为{avg_data})
+
+
+#调用函数
+print(calc_data(2,7,9,10,round=3,print=True))
+	
+	
+	
+	
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  
