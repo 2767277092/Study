@@ -78,6 +78,24 @@ S[0:5:1]  =S[:5:]       即a b c d e
 
 切片仍是List类型
 
+操作:
+
+append()      列表尾部增加元素s.append(10086)
+
+inset()       在指定索引之前插入该元素  s.insert(0,10086)
+
+remover   移除列表中匹配到的第一个值  s.remove(10086)
+
+pop()      删除列表中指定索引位置的元素(若未指定索 默认删除最后一个)  s.pop(2/空)
+
+sort()  对列表进行排序 (列表元素的数据类型一致才可以进行排序)   s.sort()
+
+reverse()       反转列表元素  s.reverse()
+
+
+
+
+
 
 
 if  num in/  not in  list:  判断元素是否存在于列表   返回True  或False   (去循环)
