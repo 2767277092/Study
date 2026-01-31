@@ -308,8 +308,6 @@ data=function(10,20,30,40,50)
 #args为元组类型 (注意并不会封装关键字参数) 
 ```
 
-
-
 ```
 #基于关键字的不定长参数 
 def calc_data(*args.**kwrgs): #封装到字典
@@ -331,19 +329,28 @@ print(calc_data(2,7,9,10,round=3,print=True))
 	
 ```
 
+不定长位置参数(*args) 用于处理数量不确定的数据
+
+不定长关键字参数(**kwargs)用于处理数量不确定的选项  (函数的配置参数.用来定制函数的行为)
 
 
 
 
 
+```
+def add(x,y):
+	return x+y
+def subtract (x,y):
+	return x-y
+def calc(x,y,oper):
+	return oper(x,y)
+result=calc(10,20,add) #add传递的是函数中 封装的逻辑
+print(result)
+```
 
 
 
-
-
-
-
-
+### 匿名函数
 
 
 
