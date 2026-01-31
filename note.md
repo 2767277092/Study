@@ -98,9 +98,15 @@ remover   移除列表中匹配到的第一个值  s.remove(10086)
 
 pop()      删除列表中指定索引位置的元素(若未指定索 默认删除最后一个)  s.pop(2/空)
 
+reverse()       反转列表元素  s.reverse()
+
 sort()  对列表进行排序 (列表元素的数据类型一致才可以进行排序)   s.sort()
 
-reverse()       反转列表元素  s.reverse()
+sort
+
+
+
+
 
 
 
