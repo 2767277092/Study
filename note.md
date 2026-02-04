@@ -174,7 +174,7 @@ index()  统计某元素的出现的索引位置(多个重复则 返回第一个
 
 #### 集合set
 
-  #无序  不可重复 可修改  (不支持下标索引访问)
+无序  不可重复 可修改  (不支持下标索引访问)
 
 定义:     s1={"c","x"}       定义空集合 s2=set()       {}表示空字典
 
@@ -400,6 +400,21 @@ phones: set[str]={"123","1234"}
 !类型注解仅起到语法提示作用,并不会影响程序运行!
 
 
+
+### 函数-类型注解
+
+为函数添加类型注解,主要是为函数的参数和返回值添加类型注解
+
+```
+def calc(scores: list[int]) ->float:
+	return sum(scores)/len(scores)
+	
+def calc_data(scores: list[int]) ->tuple[int,int,float]:
+	max_v=max(scores)
+	min_v=min(scores)
+	avg_v=sum(scores)/len(scores)
+	return max_v min_v avg_v
+```
 
 
 

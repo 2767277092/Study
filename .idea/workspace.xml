@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="461a46b3-2b3d-4794-be4f-2fa687f1e890" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/note.md" beforeDir="false" afterPath="$PROJECT_DIR$/note.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python-project01/第二章/12函数案例03.py" beforeDir="false" afterPath="$PROJECT_DIR$/python-project01/第二章/12函数案例03.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,7 +246,7 @@
       <workItem from="1769855567078" duration="30000" />
       <workItem from="1769858144210" duration="3397000" />
       <workItem from="1770168535312" duration="3640000" />
-      <workItem from="1770208179561" duration="635000" />
+      <workItem from="1770208179561" duration="2832000" />
     </task>
     <servers />
   </component>
