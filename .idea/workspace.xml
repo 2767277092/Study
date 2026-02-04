@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="461a46b3-2b3d-4794-be4f-2fa687f1e890" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/python-project01/第二章/12函数案例03.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="461a46b3-2b3d-4794-be4f-2fa687f1e890" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,27 +36,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.08 字符串.executor": "Run",
-    "Python.10集合.executor": "Run",
-    "Python.11字典.executor": "Run",
-    "Python.12函数02.executor": "Run",
-    "Python.12函数案例.executor": "Run",
-    "Python.12函数案例03.executor": "Run",
-    "Python.word.executor": "Run",
-    "Python.元组.executor": "Run",
-    "Python.函数.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "master",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.08 字符串.executor&quot;: &quot;Run&quot;,
+    &quot;Python.10集合.executor&quot;: &quot;Run&quot;,
+    &quot;Python.11字典.executor&quot;: &quot;Run&quot;,
+    &quot;Python.12函数02.executor&quot;: &quot;Run&quot;,
+    &quot;Python.12函数案例.executor&quot;: &quot;Run&quot;,
+    &quot;Python.12函数案例03.executor&quot;: &quot;Run&quot;,
+    &quot;Python.word.executor&quot;: &quot;Run&quot;,
+    &quot;Python.元组.executor&quot;: &quot;Run&quot;,
+    &quot;Python.函数.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Python.12函数案例03">
     <configuration name="10集合" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="0python" />
@@ -245,6 +242,7 @@
       <workItem from="1769855567078" duration="30000" />
       <workItem from="1769858144210" duration="3397000" />
       <workItem from="1770168535312" duration="3640000" />
+      <workItem from="1770208179561" duration="19000" />
     </task>
     <servers />
   </component>
