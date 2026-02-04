@@ -9,7 +9,7 @@
 #         return result
 # print(jiecheng(5))\
 
-
+#递归调用注意终结点
 def jc(a):
     if a!=0:
         return a*jc(a-1)
