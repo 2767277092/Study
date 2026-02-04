@@ -383,13 +383,21 @@ name=["a","b","c"]
 phones={"123","1234"}
 
 
-#类型注解
-a:int=699
-score:float=98
-name:list[str]=["a","b","c"]
-phones:set[str]={"123","1234"}
+#类型注解 
+a: int=699
+score: float=98
+name: list[str]=["a","b","c"]
+#name2: list[str|int]=["a","b","c"]
+name2.append(110)
+phones: set[str]={"123","1234"}
 
 ```
+
+### 类型推断
+
+​	Python解释器自动推断出变量 表达式或函数返回值的数据类型
+
+!类型注解仅起到语法提示作用,并不会影响程序运行!
 
 
 
