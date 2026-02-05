@@ -416,13 +416,13 @@ def calc_data(scores: list[int]) ->tuple[int,int,float]:
 	return max_v min_v avg_v
 ```
 
+### 模块
+
+  一个.py文件就是一个模块 模块是python程序的基本组织单位   模块中可以定义变量 函数 类以及可执行的代码
 
 
 
-
-
-
-
+ 
 
 
 
