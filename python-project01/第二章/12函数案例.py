@@ -16,3 +16,5 @@ def jc(a):
     else:
         return 1
 print(jc(5))
+if (jc(5)>=100)
+    print("")

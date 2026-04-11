@@ -420,9 +420,21 @@ def calc_data(scores: list[int]) ->tuple[int,int,float]:
 
   一个.py文件就是一个模块 模块是python程序的基本组织单位   模块中可以定义变量 函数 类以及可执行的代码
 
+#### 导入模块
 
+​     导入形式					代码样例					调用方式			调用方式
 
- 
+ import 模块名 				import random , os		模块名功能名		random.randint(10,100)
+
+import  模块名as 别名 		 import random as rd        别名 功能名     		rd.randint(10.100)
+
+导入形式							代码样例							调用方式				调用方式
+
+from 模块名 import 功能名    		form random import randint.choice		功能名			randint(10,100)
+
+from 模块名 Import 功能名 as 别名	from random import randint as rint   	别名			rint(10,100)
+
+from 模块名  import * 				from random import *					功能名			randint(10,100)
 
 
 
