@@ -56,7 +56,7 @@ num1=100
 
 
 
-​         \'        and   \"   and   \n     换行符 and  \t   缩进等于ta
+​         \'        and   \"   and   \n     换行符 and  \t   缩进等于tab
 
 #### 字符串的转接
 
