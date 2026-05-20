@@ -440,4 +440,10 @@ from 模块名  import * 				from random import *					功能名			randint(10,100
 
 
 
+11
+
+
+
+
+
  
